@@ -1,0 +1,127 @@
+@extends('layouts.mobile')
+
+@section('header')
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link rel="stylesheet" href="{{assert('/sweetalert2/theme-dark/dark.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha512-f0tzWhCwVFS3WeYaofoLWkTP62ObhewQ1EZn65oSYDZUg1+CyywGKkWzm8BxaJj5HGKI72PnMH9jYyIFz+GH7g==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <div class="appHeader bg-primary scrolled">
+        <div class="left">
+            <a href="#" class="headerButton" data-bs-toggle="offcanvas" data-bs-target="#sidebarPanel">
+                <ion-icon name="menu-outline"></ion-icon>
+            </a>
+        </div>
+        <div class="pageTitle">
+            We-Schedule.ca (Child Profile)
+        </div>
+        <div class="right">
+            <!--
+            <a href="#" class="headerButton toggle-searchbox">
+                <ion-icon name="search-outline"></ion-icon>
+            </a>
+            -->
+        </div>
+    </div>
+
+
+
+
+    <script>
+        function updateCategories(selObject) {
+            var value = selObject.value;
+
+            if (value) {
+                var tmpInput = document.querySelectorAll(".selCategory"); //returns NodeList
+                var tmpArray = [...tmpInput]; //converts NodeList to Array
+                tmpArray.forEach(inp => {
+                    //set value from Livewire to avoid data binding issue
+                    Livewire.emit("updateCategory", inp.getAttribute('data-key'), value);
+                });
+            }
+        }
+    </script>
+
+    <style>
+        .card-img-top-shift {
+            width: 50% !important;
+            margin-bottom: 0px !important;
+            padding-bottom: 0px !important;
+        }
+
+        .offcanvas-bottom {
+            height: 80% !important;
+        }
+    </style>
+
+    @livewireStyles
+@endsection
+
+@section ('content')
+
+    <!-- welcome notification  -->
+    <div id="notification-welcome" class="notification-box">
+        <div class="notification-dialog android-style">
+            <div class="notification-header">
+                <div class="in">
+                    <img src="/img/ws.png" alt="image" class="imaged w24">
+                    <strong>CaseManage.ca</strong>
+                    <span>just now</span>
+                </div>
+                <a href="#" class="close-button">
+                    <ion-icon name="close"></ion-icon>
+                </a>
+            </div>
+            <div class="notification-content">
+                <div class="in">
+                    <h3 class="subtitle">Welcome to CaseManage.ca </h3>
+                    <div class="text">
+                        Sample notification...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- * welcome notification -->
+
+
+
+    <div id="appCapsule">
+
+        <div class="header-large-title" style="margin-top:75px;">
+            <img width="50%" src="/img/ws_orig.png" class="mx-auto d-block mb-3"/>
+            <h1 class="text-center">My Expenses</h1>
+        </div>
+
+
+        <div class="section mt-3">
+            <div class="card">
+                <div class="card-body">
+                    @livewire('mobile.expense.expense-list')
+                </div>
+            </div>
+        </div>
+
+        <!-- app footer -->
+        <div class="appFooter pb-8 mt-0 ">
+            <img src="/img/ws_blue.png" alt="icon" class="footer-logo mb-2">
+            <div class="footer-title">
+                Copyright © We-Schedule.ca <span class="yearNow"></span>. All Rights Reserved.
+            </div>
+        </div>
+        <!-- * app footer -->
+
+    </div>
+
+    @livewireScripts
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <x-livewire-alert::scripts />
+
+@stop
+
+

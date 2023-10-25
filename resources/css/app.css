@@ -1,0 +1,6 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import "vendor/spatie/laravel-medialibrary-pro/resources/js/media-library-pro-styles";
+@import "media-library-pro-styles";
+
