@@ -1,0 +1,1 @@
+<i class="<?php echo $this->_props()["icon"]; ?><?php echo $this->_props()["type"]?" text-".$this->_props()["type"]:""; ?>"<?php echo $this->_props()["cssStyle"]?" style='".$this->_props()["cssStyle"]."'":""; ?>></i>

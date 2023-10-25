@@ -1,0 +1,50 @@
+{
+    "name": "filepond-plugin-get-file",
+    "version": "1.0.3",
+    "description": "Get File Plugin for FilePond",
+    "license": "MIT",
+    "author": {
+        "name": "Niels Boogaard"
+    },
+    "repository": "nielsboogaard/filepond-plugin-get-file",
+    "main": "dist/filepond-plugin-get-file.js",
+    "browser": "dist/filepond-plugin-get-file.js",
+    "module": "dist/filepond-plugin-get-file.esm.js",
+    "browserslist": [
+        "last 1 version and not Explorer 10",
+        "Explorer 11",
+        "iOS >= 9",
+        "Android >= 4.4"
+    ],
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "start": "npx rollup -c -w",
+        "build": "npm run scripts | npm run styles | npm run copy",
+        "scripts": "npx rollup -c",
+        "styles": "npm run styles:pretty && npm run styles:nano",
+        "styles:pretty": "cat src/css/* | npx node-sass | npx postcss --no-map --use autoprefixer | npx prettier --single-quote --parser css | node banner-cli.js FilePondPluginmediaPreview > dist/filepond-plugin-get-file.css",
+        "styles:nano": "cat src/css/* | npx node-sass | npx postcss --no-map --use autoprefixer --use cssnano | node banner-cli.js FilePondPluginmediaPreview > dist/filepond-plugin-get-file.min.css",
+        "copy": "cp -r src/images/ dist/images"
+    },
+    "peerDependencies": {
+        "filepond": ">=4.x <5.x"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.9.0",
+        "@babel/preset-env": "^7.9.5",
+        "autoprefixer": "^9.7.6",
+        "cssnano": "^4.1.10",
+        "node-sass": "^4.13.1",
+        "postcss-cli": "^7.1.0",
+        "prettier": "^2.0.5",
+        "rollup": "^2.7.2",
+        "rollup-plugin-babel": "^4.4.0",
+        "rollup-plugin-commonjs": "^10.1.0",
+        "rollup-plugin-license": "^2.0.0",
+        "rollup-plugin-node-resolve": "^5.2.0",
+        "rollup-plugin-prettier": "^2.0.0",
+        "rollup-plugin-terser": "^5.3.0"
+    }
+}

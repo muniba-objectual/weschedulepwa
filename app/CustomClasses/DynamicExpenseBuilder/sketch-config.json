@@ -1,0 +1,259 @@
+expense: {
+	is_manually_entered: {
+		bool()->default(false/0)->tinyint(1)
+	}
+}
+"Login-role-levels": {
+
+	admin login (role:"10.0") => {
+		web: {
+			expenses: {
+				- color-highlights: {
+					is_tampered_at not null:
+						colured in red full hyrachy
+					else is_manually_entered:
+						colured in yellow full hyrachy
+
+					if(values is updated){
+						is_tampered: true,
+					}else{
+						is_tampered: false,
+					}
+				}
+				- tabs: {
+					'my-expenses': {
+						status: disabled,
+					},
+					'staff' : {
+						status: enabled,
+						verify-feature: {
+							'users-to-load': function(Expense $expense){
+								return User::whereBetween('role', ['3.0', '6.0'])
+							},
+							'is_flat_logic': true,
+						},
+						collection: function(){
+							return Expense::whereIn('fk_user_id', Users::whereBetween('role', ['3.0', '6.0'])->pluck('id'));
+						},
+						groupBy: {
+							month => 'ComponentName',
+							emp_name => 'ComponentName',
+						}
+					},
+					'CYSW' : {
+						status: enabled,
+						verify-feature: false,
+						collection: function(){
+							return Expense::whereIn('fk_user_id', Users::where('role', '1.0')->pluck('id'));
+						},
+						groupBy: {
+							month => 'ComponentName',
+							fk_user_id => 'ComponentName',  //CYSW Name
+							LinkToId => 'ComponentName', //child name (child_id)
+						}
+					},
+					'Foster' : {
+						status: enabled,
+						verify-feature: true,
+						collection: function(){
+							return Expense::
+								whereIn('fk_user_id', Users::whereBetween('role', ['2.0', '2.4'])->pluck('id'));
+						},
+						groupBy: {
+							month => 'ComponentName',
+							fk_user_id => 'ComponentName', //foster parent
+							linkToId => 'ComponentName', //child, own(first)
+						}
+					},
+					'children' : {
+						status: enabled,
+						verify-feature: false,
+						collection: function(){
+							return Expense::whereIn('fk_user_id', Users::whereBetween('role', ['2.0', '2.4'])->pluck('id'));
+
+							whereNotIn('fk_user_id', Users::where('role', '1.0')->pluck('id')) //not CYSW
+							whereNotIn('fk_user_id', Users::whereBetween('role', ['2.0', '2.4'])) //not CYSW
+
+							Expense::where('linkTo', 'child'))
+									->whereIn('linkToId', Child::pluck('id'))
+								whereIn('linkTo', )
+						}
+					},
+
+				},
+			}
+		}
+	},
+
+	staff-login (role: (3.0 >= x <=6.0)) => {
+
+		//only dynamic can approve ???
+		//my/what image
+		//view variation
+
+		web: {
+			expense: {
+				- tabs: [
+					'my-expenses': {
+						verify-feature: disabled
+					},
+					'staff' => {
+						verify-feature: {
+							verification-administration-control-by: {
+								- admini-role: "10.0"
+								- user-allocatoin-range: role 3.0 between 6.0
+							},
+						}
+						list: {
+							- relation: staff member expenses allowed/assigned for verify process,
+							- groupBy: child,
+							- limit: limit(this_month),
+							- orderBy: latest()
+						}
+					},
+				],
+			},
+		},
+
+		mobile: {
+			- route-home: "/mobileCM",
+			- redirectTo: expense create button location.
+			- expense-create-form {
+				if(manual_mode){
+					add delete button per each row
+				},
+				disable stage 3, directyly map to myself, fk_User_id //linkTO:null inkToId:null
+				utilize session variables instead loading from step() function
+			}
+			- expense-view: disabled
+		}
+
+		role_managers (role:[3.3, 4.1, 4.4, "5<=x<=6"]) => {
+			web: {
+				expense: {
+					tabs: [
+						'CYSW' => {
+							verify-feature: enabled
+						},
+						'Foster Parents' => {
+							verify-feature: enabled
+						},
+						'Children' => {
+							verify-feature: enabled
+						},
+					],
+				}
+			}
+		},
+
+	},
+
+	case_manager (role: 3.4) => {
+		web: {
+			expense: {
+				tabs: [
+					'Children' => {
+						verify-feature: enabled (by relation)
+					},
+				],
+			}
+		}
+	}
+
+	CYSW (role:"1.0") => {
+		mobile: {
+			- route-home: "/mobile",
+			- expense-view {
+				on left menu after profile element,
+				limit to current month
+				//ignore:group by child
+			}
+			- expense-create-form {
+				if(manual_mode){
+					add delete button per each row
+				}
+				imbeded in the child view->expese tab
+				stage3: {
+					status: false,
+					dropdown-options: [],
+					'default-map': {
+						'linkTo' => 'Child',
+						'LinkToId' => Session('expense.child_id'),
+					},
+				},
+				utilize session variables instead loading from step() function
+			}
+		},
+	},
+
+	foster-login (role: (2.0>= x <=2.4)) => {
+		web: {
+			expense: {
+				- tabs: [
+					'my-expenses' : {
+						verify-feature: disabled
+					},
+					'children' : {
+						verify-feature: disabled
+					},
+				],
+			}
+		}
+		mobile: {
+			- route-home: "/mobileCM",
+			- expense-list-view {
+				on left menu after profile element,
+				limit to current month
+				order-by: {
+					my expenses first "user()->expenses()->latest()->limit(this_month)",
+					second children "user()->assgnedChildren()->expenses()->latest()->limit(this_month)"
+				}
+				//ignore:group by child
+			}
+			- expense-create-form {
+				if(manual_mode){
+					is_manually_entered: true,
+				}else{
+					is_manually_entered: false,
+				}
+
+				if(values is updated){
+					is_tampered: true,
+				}else{
+					is_tampered: false,
+				}
+
+
+				if(manual_mode){
+					add delete button per each row
+				}
+
+				- imbeded in the child view->expese tab
+				stage3: {
+					status: true,
+					dropdown-options: [
+						'myself': {
+							"subOptions" : [],
+							'map': {
+								'linkTo' => null,
+								'LinkToId' => null,
+							},
+						},
+						'child':{
+							"subOptions" : user()->assgnedChildren(),
+							'map': {
+								'linkTo' => 'Child',
+								'LinkToId' => Session('expense.child_id'),
+							},
+						}
+					],
+				},
+
+				utilize session variables instead loading from step() function
+			}
+		},
+
+	},
+
+
+}

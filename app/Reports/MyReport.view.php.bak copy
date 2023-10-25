@@ -1,0 +1,201 @@
+<?php
+use \koolreport\widgets\koolphp\Table;
+use \koolreport\processes\Group;
+use \koolreport\processes\Sort;
+use \koolreport\laravel\Friendship;
+
+?>
+<html>
+<head>
+    <title>We-Schedule.ca - Payroll Report</title>
+
+<style>
+    /*
+    tr.row-group td {
+            margin-bottom: 20px;
+    }
+
+
+*/
+    .darker
+    {
+        background:#ccc;
+    }
+
+    .highlight
+     {
+        background-color:yellow;
+    }
+</style>
+</head>
+<body>
+
+<center><img src="img/ws.png" height="15%"/></center>
+<h3 align="center">Payroll Report</h3>
+<table class="table table-bordered">
+    <tbody>
+    <tr>
+        <td>Date of Report: <b><?php echo date('F');?></b></td>
+        <td>From: <b><?php echo $this->params['from_date'];?></b></td>
+        <td>To: <b><?php echo $this->params['to_date'];?></b></td>
+        <td>Requested By: <b><?php echo $this->params['user'];?></b></td>
+    </tr>
+    </tbody>
+</table>
+<?php
+
+if (Auth::user()->user_type == 10.0) {
+//Report for Blair
+    Table::create([
+        "dataSource"=>$this->dataStore("Payroll"),
+        "sorting"=>array(
+            "name"=>"asc"
+        ),
+
+
+
+        "grouping"=>array(
+            "name"=>array(
+                "calculate"=>array(
+                    "{sumAmount}"=>array("sum","total")
+                ),
+                "top"=>"CYSW Name: <b>{name}</b>",
+                "bottom"=>"<td align='right' class='darker' colspan='3'><b>{name}</b> Total Payroll</td><td class='darker'><b>{sumAmount}</b></td>",
+            )
+        ),
+        "showHeader"=>false,
+        "showFooter"=>true,
+
+
+        "columns"=>array(
+            "initials"=>array(
+                "prefix"=>"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Child Name: <b>",
+                "suffix"=>"</b>"
+            ),
+            "hours"=>array(
+                "type"=>"number",
+                "decimals"=>1,
+                "prefix"=>"Hours: <b>",
+                "suffix"=>"</b>",
+                "footer"=>"sum"
+
+
+            ),
+            "salary"=>array(
+                "prefix"=>"Rate: $<b>",
+                "suffix"=>"</b>"
+
+            ),
+            "total"=>array(
+                "prefix"=>"Total: $<b>",
+                "suffix"=>"</b>",
+                "footer"=>"sum",
+                "footerText"=>"Payroll @value"
+            )
+        ),
+
+        /*
+        "paging"=>array(
+                "pageSize"=>10,
+                "pageIndex"=>0,
+                "align"=>"center"
+            ),
+    */
+
+        "cssClass"=>array(
+            "table"=>"table-bordered table-hover table-stripe",
+            "tf"=>"highlight",
+            //"tr.row-group"=>"darker"
+        )
+    ]);
+
+} else {
+    Table::create([
+        "dataSource"=>$this->dataStore("Payroll"),
+        "sorting"=>array(
+            "name"=>"asc"
+        ),
+
+
+
+        "grouping"=>array(
+            "name"=>array(
+                "calculate"=>array(
+                    "{sumAmount}"=>array("sum","total")
+                ),
+                "top"=>"CYSW Name: <b>{name}</b>",
+                "bottom"=>"<td align='right' class='darker' colspan='3'><b>{name}</b> Total Payroll</td><td class='darker'><b>{sumAmount}</b></td>",
+            )
+        ),
+        "showHeader"=>false,
+        "showFooter"=>true,
+
+
+        "columns"=>array(
+            "initials"=>array(
+                "prefix"=>"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Child Name: <b>",
+                "suffix"=>"</b>"
+            ),
+            "hours"=>array(
+                "type"=>"number",
+                "decimals"=>1,
+                "prefix"=>"Hours: <b>",
+                "suffix"=>"</b>",
+
+
+            ),
+            "salary"=>array(
+                "prefix"=>"Rate: $<b>",
+                "suffix"=>"</b>"
+
+            ),
+            "total"=>array(
+                "prefix"=>"Total: $<b>",
+                "suffix"=>"</b>",
+                "footer"=>"sum",
+                "footerText"=>"Payroll @value"
+            )
+        ),
+
+        /*
+        "paging"=>array(
+                "pageSize"=>10,
+                "pageIndex"=>0,
+                "align"=>"center"
+            ),
+    */
+
+        "cssClass"=>array(
+            "table"=>"table-bordered table-hover table-stripe",
+            "tf"=>"highlight",
+            //"tr.row-group"=>"darker"
+        )
+    ]);
+
+}
+
+
+
+/*
+Table::create(array(
+    "dataSource"=>
+    $this->dataStore('User'),
+
+
+    "columns"=>array(
+        "name"=>array(
+            "label"=>"Name"
+        ),
+
+    ),
+    "paging"=>array(
+        "pageSize"=>25
+    ),
+    "cssClass"=>array(
+        "table"=>"table-bordered table-striped table-hover"
+    )
+));
+*/
+?>
+</body>
+</html>

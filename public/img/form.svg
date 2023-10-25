@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38" height="38" viewBox="0 0 38 38">
+  <defs>
+    <linearGradient id="linear-gradient" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#3a416f"/>
+      <stop offset="1" stop-color="#141727"/>
+    </linearGradient>
+  </defs>
+  <g id="Icon" transform="translate(0 0.057)">
+    <rect id="Rectangle_651" data-name="Rectangle 651" width="38" height="38" rx="8" transform="translate(0 -0.057)" fill="url(#linear-gradient)"/>
+    <path id="form" d="M12.91.229a3.787,3.787,0,0,1,1.432.887L15.6,2.38a3.776,3.776,0,0,1,.888,1.432H12.91ZM11.385,9.148H8.336a.762.762,0,1,0,0,1.525h3.049a.762.762,0,0,0,0-1.525ZM12.91,5.336a1.525,1.525,0,0,1-1.525-1.525V0H6.811A3.816,3.816,0,0,0,3,3.811V14.484A3.816,3.816,0,0,0,6.811,18.3h6.1a3.816,3.816,0,0,0,3.811-3.811V5.336Zm0,9.91h-6.1a.762.762,0,1,1,0-1.525h6.1a.762.762,0,0,1,0,1.525ZM11.385,12.2H8.336a2.287,2.287,0,0,1,0-4.574h3.049a2.287,2.287,0,0,1,0,4.574Z" transform="translate(9 9.943)" fill="#fff"/>
+  </g>
+</svg>
